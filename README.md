@@ -11,9 +11,10 @@ npm i discord-playing
 ``` 
 
 ##Discord.js v11 compatibility
-You can install the last version working with Discord.js v11 by using "npm install discord-playing@1.7.1".
+You can install the last version working with Discord.js v11 by using `npm install discord-playing@discord.js-v11`.
 While this version should work, it's not maintainted anymore.
 
+##Instructions
 Once you've done this, setting the module will be very easy.
 And you can follow the code  below to get started!
 
@@ -34,6 +35,7 @@ Playing(bot, {
 	"125048273865015211" : {
 		live :  "In-Game",
 		games : ["Star Citizen", "DCS World"],          // 1 or multiple games, format changed on v2.0.0
+		//,required : "Streamers" // optional parameter, only use if you want to take action on people of a specific role
 		}	
 	}
 });
@@ -55,7 +57,9 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
-2.0.1 Initial push to GitHub, and Initial Discord.js v12 verion. removed required group option, contact me if you need.
+2.1.0 Added back the option to set a required group
+2.0.2 Added better check when members isn't playing the designated games anymore  
+2.0.1 Initial push to GitHub, and Initial Discord.js v12 verion. removed required group option, contact me if you need.  
 1.7.1 Modified the scheduler to avoid spamming (one action per 2 seconds max), last v11 compatible version  
 1.0.0 Initial publish  
 

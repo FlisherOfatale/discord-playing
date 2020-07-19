@@ -1,9 +1,11 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.0.1
+Version 2.1.0
 
 ##History:
+2.1.0 Added back the option to set a required group
+2.0.2 Added better check when members isn't playing the designated games anymore
 2.0.1 Initial push to GitHub, and Initial Discord.js v12 verion  
 1.7.1 Modified the scheduler to avoid spamming (one action per 2 seconds max), last v11 compatible version  
 1.0.0 Initial publish  
@@ -21,7 +23,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.0.0`
+		version: `2.0.2`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
@@ -88,6 +90,17 @@ module.exports = async (bot, options) => {
 	}
 
 
+	function gotRequiredRole(member, requiredRole) {
+		let returnValue = false
+		if (typeof requiredRole !== "undefined") {
+			returnValue = (typeof (member.roles.cache.find(val => val.name === requiredRole || val.id === requiredRole)) !== "undefined")
+		} else {
+			returnValue = true
+		}
+		return returnValue
+	}
+
+
 	async function addRole(member, role) {
 		let actionTaken = false
 		try {
@@ -104,7 +117,7 @@ module.exports = async (bot, options) => {
 		return actionTaken
 	}
 
-	
+
 	async function removeRole(member, role) {
 		let actionTaken = false
 		try {
@@ -137,8 +150,13 @@ module.exports = async (bot, options) => {
 							// The activities list is an array, needing to parse trought it
 							for (let activityKey in element.activities) {
 								let activity = element.activities[activityKey]
-								if (isPlaying(activity, options.games)) {
-									actionAlreadyTaken = await addRole(element.guild.members.cache.get(key), options.live)
+								if (activity && activity.type === "PLAYING") {
+									let member = element.guild.members.cache.get(key)
+									if (gotRequiredRole(member, options.required)) {
+										if (isPlaying(activity, options.games)) {
+											actionAlreadyTaken = await addRole(member, options.live)
+										}
+									}
 								}
 							}
 
@@ -157,23 +175,26 @@ module.exports = async (bot, options) => {
 		if (guild.me.hasPermission("MANAGE_ROLES")) {
 			// Loop trough presence to find streamers (type 1)
 			let gamingMembers = guild.roles.cache.find(val => val.name === options.live).members
-			let actionAlreadyTaken = false 			// This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated
+			let actionAlreadyTaken = false // This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated
 			for (let [memberid, member] of gamingMembers) {
 				if (!actionAlreadyTaken) {
-					if (member.presence && typeof member.presence.activities !== undefined &&  Object.keys(member.presence.activities).length > 0) {
+					let isPlayingSC = false
+					if (member.presence && typeof member.presence.activities !== undefined && Object.keys(member.presence.activities).length > 0) {
 						// Need to iterate activities
 						for (let activityKey in member.presence.activities) {
 							let activity = member.presence.activities[activityKey]
-							/*
-							if (!isPlaying(activity, options.games)) {
-								actionAlreadyTaken = await removeRole(member, options.live)
+							if (activity && activity.type === "PLAYING") {
+								if (isPlaying(activity, options.games)) {
+									isPlayingSC = true
+								}
 							}
-							*/
 						}
 					} else {
 						// No activity, the member isn't playing anymore
-						actionAlreadyTaken = await removeRole(member, options.live)
+
 					}
+					if (!isPlayingSC) actionAlreadyTaken = await removeRole(member, options.live)
+
 				}
 
 			}
