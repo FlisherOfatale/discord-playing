@@ -1,10 +1,10 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.0.0
+Version 2.0.1
 
 ##History:
-2.0.0 Initial push to GitHub, and Initial Discord.js v12 verion  
+2.0.1 Initial push to GitHub, and Initial Discord.js v12 verion  
 1.7.1 Modified the scheduler to avoid spamming (one action per 2 seconds max), last v11 compatible version  
 1.0.0 Initial publish  
 
