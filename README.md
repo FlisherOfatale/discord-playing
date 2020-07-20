@@ -57,7 +57,8 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
-2.1.0 Added back the option to set a required group
+2.1.1 Fixed self-reported version  
+2.1.0 Added back the option to set a required group  
 2.0.2 Added better check when members isn't playing the designated games anymore  
 2.0.1 Initial push to GitHub, and Initial Discord.js v12 verion. removed required group option, contact me if you need.  
 1.7.1 Modified the scheduler to avoid spamming (one action per 2 seconds max), last v11 compatible version  

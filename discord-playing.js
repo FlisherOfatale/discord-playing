@@ -1,9 +1,10 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.1.0
+Version 2.1.1
 
 ##History:
+2.1.1 Fixed self-reported version  
 2.1.0 Added back the option to set a required group
 2.0.2 Added better check when members isn't playing the designated games anymore
 2.0.1 Initial push to GitHub, and Initial Discord.js v12 verion  
@@ -23,7 +24,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.0.2`
+		version: `2.1.1`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
