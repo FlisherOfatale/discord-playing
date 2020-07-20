@@ -1,9 +1,10 @@
-/*
+2/*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.1.1
+Version 2.2.0
 
 ##History:
+2.2.0 Improved error logging
 2.1.1 Fixed self-reported version  
 2.1.0 Added back the option to set a required group
 2.0.2 Added better check when members isn't playing the designated games anymore
@@ -24,7 +25,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.1.1`
+		version: `2.2.0`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
@@ -114,6 +115,7 @@ module.exports = async (bot, options) => {
 			}
 		} catch (e) {
 			console.error(`${description.name} -> GamingLive - Bot could not assign role to ${member} of guild ${member.guild} / ${member.guild.id} )`);
+			console.error(e)
 		}
 		return actionTaken
 	}
@@ -131,6 +133,7 @@ module.exports = async (bot, options) => {
 			}
 		} catch (e) {
 			console.error(`${description.name} -> GamingLive - Bot could not remove role to ${member} of guild ${member.guild} / ${member.guild.id} )`);
+			console.error(e)
 		}
 		return actionTaken
 	}
