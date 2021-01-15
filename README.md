@@ -30,7 +30,7 @@ Playing(client, {
 ###Multi-Servers Usage 
 
 ```js
-const Playing = require("discord-playing"");
+const Playing = require("discord-playing");
 Playing(bot, {
 	"125048273865015211" : {
 		live :  "In-Game",

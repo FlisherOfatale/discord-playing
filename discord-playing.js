@@ -1,10 +1,10 @@
 2/*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.2.0
+Version 2.2.2
 
 ##History:
-2.2.1 Adding option to use status 
+2.2.2 Adding option to use status 
 2.2.0 Improved error logging
 2.1.1 Fixed self-reported version  
 2.1.0 Added back the option to set a required group
@@ -26,7 +26,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.2.1`
+		version: `2.2.2`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
@@ -88,7 +88,7 @@ module.exports = async (bot, options) => {
 
 
 	function isPlaying(activity, games) {
-		return games.includes(activity.name)
+		return games.includes(activity.name) || games.includes(activity.state)
 
 	}
 
@@ -183,15 +183,15 @@ module.exports = async (bot, options) => {
 			let actionAlreadyTaken = false // This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated
 			for (let [memberid, member] of gamingMembers) {
 				if (!actionAlreadyTaken) {
-					let isPlaying = false
+					let isPlayingGame = false
 					if (member.presence && typeof member.presence.activities !== undefined && Object.keys(member.presence.activities).length > 0) {
 						// Need to iterate activities
 						for (let activityKey in member.presence.activities) {
 							let activity = member.presence.activities[activityKey]
 							if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS")) {
 								if (isPlaying(activity, options.games)) {
-									isPlaying = true
-								}
+									isPlayingGame = true
+								}							
 							}
 						}
 					} else {
