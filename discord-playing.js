@@ -198,7 +198,7 @@ module.exports = async (bot, options) => {
 						// No activity, the member isn't playing anymore
 
 					}
-					if (!isPlaying) actionAlreadyTaken = await removeRole(member, options.live)
+					if (!isPlayingGame) actionAlreadyTaken = await removeRole(member, options.live)
 
 				}
 
