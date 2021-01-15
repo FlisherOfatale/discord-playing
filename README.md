@@ -57,6 +57,7 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
+2.2.3 Adding option to use custom status 
 2.2.0 Improved error logging  
 2.1.1 Fixed self-reported version  
 2.1.0 Added back the option to set a required group  

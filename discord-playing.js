@@ -1,10 +1,10 @@
 2/*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.2.2
+Version 2.2.3
 
 ##History:
-2.2.2 Adding option to use status 
+2.2.3 Adding option to use custom status 
 2.2.0 Improved error logging
 2.1.1 Fixed self-reported version  
 2.1.0 Added back the option to set a required group
@@ -26,7 +26,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.2.2`
+		version: `2.2.3`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
