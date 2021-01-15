@@ -188,7 +188,7 @@ module.exports = async (bot, options) => {
 						// Need to iterate activities
 						for (let activityKey in member.presence.activities) {
 							let activity = member.presence.activities[activityKey]
-							if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS") {
+							if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS")) {
 								if (isPlaying(activity, options.games)) {
 									isPlaying = true
 								}
