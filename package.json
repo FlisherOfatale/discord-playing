@@ -1,6 +1,6 @@
 {
   "name": "discord-playing",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Simple Discord.js v12 Module that assign temporary role to people currently playing specific games, usefull to highlight them in a separate group.",
   "main": "discord-playing.js",
   "scripts": {

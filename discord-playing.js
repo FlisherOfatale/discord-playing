@@ -4,6 +4,7 @@ Author: Flisher (andre@jmle.net)
 Version 2.2.0
 
 ##History:
+2.2.1 Adding option to use status 
 2.2.0 Improved error logging
 2.1.1 Fixed self-reported version  
 2.1.0 Added back the option to set a required group
@@ -25,7 +26,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.2.0`
+		version: `2.2.1`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
@@ -154,7 +155,7 @@ module.exports = async (bot, options) => {
 							// The activities list is an array, needing to parse trought it
 							for (let activityKey in element.activities) {
 								let activity = element.activities[activityKey]
-								if (activity && activity.type === "PLAYING") {
+								if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS")) {
 									let member = element.guild.members.cache.get(key)
 									if (gotRequiredRole(member, options.required)) {
 										if (isPlaying(activity, options.games)) {
@@ -182,14 +183,14 @@ module.exports = async (bot, options) => {
 			let actionAlreadyTaken = false // This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated
 			for (let [memberid, member] of gamingMembers) {
 				if (!actionAlreadyTaken) {
-					let isPlayingSC = false
+					let isPlaying = false
 					if (member.presence && typeof member.presence.activities !== undefined && Object.keys(member.presence.activities).length > 0) {
 						// Need to iterate activities
 						for (let activityKey in member.presence.activities) {
 							let activity = member.presence.activities[activityKey]
-							if (activity && activity.type === "PLAYING") {
+							if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS") {
 								if (isPlaying(activity, options.games)) {
-									isPlayingSC = true
+									isPlaying = true
 								}
 							}
 						}
@@ -197,7 +198,7 @@ module.exports = async (bot, options) => {
 						// No activity, the member isn't playing anymore
 
 					}
-					if (!isPlayingSC) actionAlreadyTaken = await removeRole(member, options.live)
+					if (!isPlaying) actionAlreadyTaken = await removeRole(member, options.live)
 
 				}
 
