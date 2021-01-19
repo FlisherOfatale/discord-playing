@@ -67,7 +67,7 @@ module.exports = async (bot, options) => {
 
 		if (options && options.live) {
 			// Single Server Config, will default to first guild found in the bot
-			let guild = bot.guilds.first();
+			let guild = bot.guilds.cache.first();
 			await GamingLive(guild, options)
 			await GamingNotLive(guild, options)
 		} else {
