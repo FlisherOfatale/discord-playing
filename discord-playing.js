@@ -1,9 +1,10 @@
 2/*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.2.3
+Version 2.2.4
 
 ##History:
+2.2.4 Fixing a crash on line 70, thanks to Badbird-5907
 2.2.3 Adding option to use custom status 
 2.2.0 Improved error logging
 2.1.1 Fixed self-reported version  
