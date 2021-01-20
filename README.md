@@ -57,7 +57,7 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
-2.2.4 Fixing a crash on line 70, thanks to Badbird-5907
+2.2.5 Fixing a crash on line 70, thanks to Badbird-5907
 2.2.3 Adding option to use custom status 
 2.2.0 Improved error logging  
 2.1.1 Fixed self-reported version  
