@@ -1,4 +1,5 @@
-2/*
+2
+/*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
 Version 2.2.5
@@ -96,16 +97,15 @@ module.exports = async (bot, options) => {
 
 	function gotRequiredRole(member, requiredRole) {
 		let returnValue = false
-		if (typeof requiredRole !== "undefined" && member && member.roles && member.roles.cache )  {
-			/*  Fix to do here and in discord-streaming
-				6|lys-42-v | 2021-02-02T12:36:45: TypeError: Cannot read property 'roles' of undefined                                             
-				6|lys-42-v | 2021-02-02T12:36:45:     at gotRequiredRole (/opt/bots/v12/node_modules/discord-playing/discord-playing.js:100:34)    
-				6|lys-42-v | 2021-02-02T12:36:45:     at GamingLive (/opt/bots/v12/node_modules/discord-playing/discord-playing.js:161:14)         
-				6|lys-42-v | 2021-02-02T12:36:45:     at async Check (/opt/bots/v12/node_modules/discord-playing/discord-playing.js:80:6)          
-			*/
-			returnValue = (typeof (member.roles.cache.find(val => val.name === requiredRole || val.id === requiredRole)) !== "undefined")
-		} else {
-			returnValue = true
+		try {
+			if (typeof requiredRole !== "undefined" && member && member.roles && member.roles.cache) {
+				returnValue = (typeof (member.roles.cache.find(val => val.name === requiredRole || val.id === requiredRole)) !== "undefined")
+			} else {
+				returnValue = true
+			}
+		} catch (e) {
+			console.error(`${description.name} -> GamingLive - Bot failed the gotRequiredRole function for ${member} of guild ${member.guild} / ${member.guild.id} )`);
+			console.error(e)
 		}
 		return returnValue
 	}
@@ -198,7 +198,7 @@ module.exports = async (bot, options) => {
 							if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS")) {
 								if (isPlaying(activity, options.games)) {
 									isPlayingGame = true
-								}							
+								}
 							}
 						}
 					} else {
