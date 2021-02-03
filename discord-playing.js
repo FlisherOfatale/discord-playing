@@ -1,9 +1,11 @@
-2/*
+2
+/*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.2.5
+Version 2.3.1
 
 ##History:
+2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version
 2.2.5 Fixing a crash on line 70, thanks to Badbird-5907
 2.2.3 Adding option to use custom status 
 2.2.0 Improved error logging
@@ -27,7 +29,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.2.5`
+		version: `2.3.1`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
@@ -96,10 +98,15 @@ module.exports = async (bot, options) => {
 
 	function gotRequiredRole(member, requiredRole) {
 		let returnValue = false
-		if (typeof requiredRole !== "undefined") {
-			returnValue = (typeof (member.roles.cache.find(val => val.name === requiredRole || val.id === requiredRole)) !== "undefined")
-		} else {
-			returnValue = true
+		try {
+			if (typeof requiredRole !== "undefined" && member && member.roles && member.roles.cache) {
+				returnValue = (typeof (member.roles.cache.find(val => val.name === requiredRole || val.id === requiredRole)) !== "undefined")
+			} else {
+				returnValue = true
+			}
+		} catch (e) {
+			console.error(`${description.name} -> GamingLive - Bot failed the gotRequiredRole function for ${member} of guild ${member.guild} / ${member.guild.id} )`);
+			console.error(e)
 		}
 		return returnValue
 	}
@@ -192,7 +199,7 @@ module.exports = async (bot, options) => {
 							if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS")) {
 								if (isPlaying(activity, options.games)) {
 									isPlayingGame = true
-								}							
+								}
 							}
 						}
 					} else {
