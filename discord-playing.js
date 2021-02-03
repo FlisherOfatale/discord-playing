@@ -2,9 +2,10 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.2.5
+Version 2.3.1
 
 ##History:
+2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version
 2.2.5 Fixing a crash on line 70, thanks to Badbird-5907
 2.2.3 Adding option to use custom status 
 2.2.0 Improved error logging
@@ -28,7 +29,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.3.0-bugfix`
+		version: `2.3.1`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
