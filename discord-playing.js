@@ -27,7 +27,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.2.5`
+		version: `2.3.0-bugfix`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
@@ -96,7 +96,13 @@ module.exports = async (bot, options) => {
 
 	function gotRequiredRole(member, requiredRole) {
 		let returnValue = false
-		if (typeof requiredRole !== "undefined") {
+		if (typeof requiredRole !== "undefined" && member && member.roles && member.roles.cache )  {
+			/*  Fix to do here and in discord-streaming
+				6|lys-42-v | 2021-02-02T12:36:45: TypeError: Cannot read property 'roles' of undefined                                             
+				6|lys-42-v | 2021-02-02T12:36:45:     at gotRequiredRole (/opt/bots/v12/node_modules/discord-playing/discord-playing.js:100:34)    
+				6|lys-42-v | 2021-02-02T12:36:45:     at GamingLive (/opt/bots/v12/node_modules/discord-playing/discord-playing.js:161:14)         
+				6|lys-42-v | 2021-02-02T12:36:45:     at async Check (/opt/bots/v12/node_modules/discord-playing/discord-playing.js:80:6)          
+			*/
 			returnValue = (typeof (member.roles.cache.find(val => val.name === requiredRole || val.id === requiredRole)) !== "undefined")
 		} else {
 			returnValue = true
