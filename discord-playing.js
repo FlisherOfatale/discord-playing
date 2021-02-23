@@ -1,7 +1,7 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.4.2
+Version 2.4.3
 
 // Todo: 
 	Add randomness in the minutes for the cron task
@@ -15,7 +15,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.4.2`
+		version: `2.4.3`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
