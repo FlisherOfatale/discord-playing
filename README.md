@@ -35,7 +35,9 @@ Playing(bot, {
 	"125048273865015211" : {
 		live :  "In-Game",
 		games : ["Star Citizen", "DCS World"],          // 1 or multiple games, format changed on v2.0.0
-		//,required : "Streamers" // optional parameter, only use if you want to take action on people of a specific role
+		//, required : "Streamers" 	// optional parameter, only use if you want to take action on people of a specific role
+		//, casesensitive : true,  	// optional, default to true
+		//, exactmatch : true, 		// optional, default to true, will match if the configured string is present in the activity or state
 		}	
 	}
 });
@@ -57,9 +59,10 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
-2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version
-2.2.5 Fixing a crash on line 70, thanks to Badbird-5907
-2.2.3 Adding option to use custom status 
+2.4.2 Added 'casesensitive' and exactmatch 'options'  
+2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version  
+2.2.5 Fixing a crash on line 70, thanks to Badbird-5907  
+2.2.3 Adding option to use custom status  
 2.2.0 Improved error logging  
 2.1.1 Fixed self-reported version  
 2.1.0 Added back the option to set a required group  

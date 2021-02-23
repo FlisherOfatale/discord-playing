@@ -1,21 +1,7 @@
-2
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.3.1
-
-##History:
-2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version
-2.2.5 Fixing a crash on line 70, thanks to Badbird-5907
-2.2.3 Adding option to use custom status 
-2.2.0 Improved error logging
-2.1.1 Fixed self-reported version  
-2.1.0 Added back the option to set a required group
-2.0.2 Added better check when members isn't playing the designated games anymore
-2.0.1 Initial push to GitHub, and Initial Discord.js v12 verion  
-1.7.1 Modified the scheduler to avoid spamming (one action per 2 seconds max), last v11 compatible version  
-1.0.0 Initial publish  
-
+Version 2.4.2
 
 // Todo: 
 	Add randomness in the minutes for the cron task
@@ -29,7 +15,7 @@ module.exports = async (bot, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.3.1`
+		version: `2.4.2`
 	}
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
@@ -56,6 +42,28 @@ module.exports = async (bot, options) => {
 	async function onReady() {
 		Ready = true;
 		console.log(`Module: ${description.name} | Ready`)
+
+		// Serverless Config
+		if (options && options.live) {
+			if (typeof options.casesensitive === 'undefined') options.casesensitive = true
+			if (typeof options.exactmatch === 'undefined') options.exactmatch = true
+			if (options.casesensitive === false) {
+				for (let [key, element] of options.games) {
+					options.games[key] = options.games[key].toLowerCase()
+				}
+			}
+		} else {
+			// Initialize if options are multi-server
+			for (let guildid in options) {
+				if (typeof options[guildid].casesensitive === 'undefined') options[guildid].casesensitive = true
+				if (typeof options[guildid].exactmatch === 'undefined') options[guildid].exactmatch = true
+				if (options[guildid].casesensitive === false) {
+					for (let [key] in options[guildid].games) {
+						options[guildid].games[key] = options[guildid].games[key].toLowerCase()
+					}
+				}
+			}
+		}
 	}
 
 	// Add a Cron job every minutes
@@ -90,9 +98,45 @@ module.exports = async (bot, options) => {
 	}
 
 
-	function isPlaying(activity, games) {
-		return games.includes(activity.name) || games.includes(activity.state)
+	function isPlaying(activity, localoptions) {
+		// TODO flip logic with loop if lax mode is enabled
+		// TODO add case scenario.
+		if (localoptions.exactmatch === true) {
+			if (localoptions.casesensitive === true) {
+				return localoptions.games.includes(activity.name) || localoptions.games.includes(activity.state)
+			}
+			else {
+				let match 
+				if ( typeof activity.name === "string" ) match = localoptions.games.includes(activity.name.toLowerCase())
+				if ( typeof activity.state === "string" ) match = ( localoptions.games.includes(activity.state.toLowerCase()) || match)
+				return match
+			}
+		}
+		else {
+			// loop for not exact match
 
+			// Turn haystack toLowerCase
+			if (! localoptions.casesensitive) {
+				if (typeof activity.name === "string") activity.name = activity.name.toLowerCase()
+				if (typeof activity.state === "string") activity.state = activity.state.toLowerCase()
+			}
+			
+			// Search needle in the haystack
+			for (let [key] in localoptions.games) {
+				/*
+				console.log("2222", 
+				{	"key" : key,
+					"activity.name" : activity.name,
+					"activity.state" : activity.state,
+					"localoptions.games[key]" : localoptions.games[key],
+
+				})*/
+				if (typeof activity.name === "string") if (activity.name.includes(localoptions.games[key])) return true
+				if (typeof activity.state === "string") if (activity.state.includes(localoptions.games[key])) return true
+			}
+				
+			
+		}
 	}
 
 
@@ -166,7 +210,7 @@ module.exports = async (bot, options) => {
 								if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS")) {
 									let member = element.guild.members.cache.get(key)
 									if (gotRequiredRole(member, options.required)) {
-										if (isPlaying(activity, options.games)) {
+										if (isPlaying(activity, options)) {
 											actionAlreadyTaken = await addRole(member, options.live)
 										}
 									}
@@ -197,7 +241,7 @@ module.exports = async (bot, options) => {
 						for (let activityKey in member.presence.activities) {
 							let activity = member.presence.activities[activityKey]
 							if (activity && (activity.type === "PLAYING" || activity.type === "CUSTOM_STATUS")) {
-								if (isPlaying(activity, options.games)) {
+								if (isPlaying(activity, options)) {
 									isPlayingGame = true
 								}
 							}
