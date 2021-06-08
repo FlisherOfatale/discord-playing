@@ -1,7 +1,7 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 3.0.0
+Version 3.0.5
 
 // Todo: 
 	Add randomness in the minutes for the cron task
@@ -15,7 +15,7 @@ module.exports = async (client, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `3.0.0`
+		version: `3.0.5`
 	}
 
 	if (!options) {
@@ -27,36 +27,34 @@ module.exports = async (client, options) => {
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
 	const DiscordJSversion = require("discord.js").version.substring(0, 2)
-	const ValidDJSVersion = ['12', '13']
-	if (!ValidDJSVersion.includes(DiscordJSversion)) console.error("This version of discord-lobby only run on DiscordJS V12 and up, please run \"npm i discord-playing@discord.js-v11\" to install an older version")
-	if (!ValidDJSVersion.includes(DiscordJSversion)) return
+	console.log({
+		"version": client.version
+	})
+	if (DiscordJSversion === '11') console.error("This version of discord-lobby only run on DiscordJS V13 and up, please run \"npm i discord-playing@discord.js-v11\" to install an older version")
+	if (DiscordJSversion === '12') console.error("This version of discord-lobby only run on DiscordJS V13 and up, please run \"npm i discord-playing@discord.js-v12\" to install an older version")
+	if (DiscordJSversion !== '13') return
 
-	if (DiscordJSversion === '13') {
-		// Check that required Gateway Intention
-		const {
-			Intents
-		} = require('discord.js');
-		const liveIntent = new Intents(client.options.intents)
-		const requiredIntent = ['GUILD_PRESENCES', 'GUILDS', 'GUILD_MEMBERS']
-		const gotAllIntent = liveIntent.has(requiredIntent)
+	// Check that required Gateway Intention
+	const {
+		Intents
+	} = require('discord.js');
+	const liveIntent = new Intents(client.options.intents)
+	const requiredIntent = ['GUILD_PRESENCES', 'GUILDS', 'GUILD_MEMBERS']
+	const gotAllIntent = liveIntent.has(requiredIntent)
 
-		if (gotAllIntent) {
-			init(client, options)
-		} else {
-			console.log(`Module: ${description.name} | Version ${description.version} NOT initialized due to the following reasons ")`)
-			for (let i in requiredIntent) {
-				let checkedIntent = requiredIntent[i]
-				if (!liveIntent.has(requiredIntent[i])) {
-					console.log(`Module: ${description.name} | Missing Gateway Intent ${requiredIntent[i]}`)
-				}
+	if (gotAllIntent) {
+		init(client, options)
+	} else {
+		console.log(`Module: ${description.name} | Version ${description.version} NOT initialized due to the following reasons ")`)
+		for (let i in requiredIntent) {
+			let checkedIntent = requiredIntent[i]
+			if (!liveIntent.has(requiredIntent[i])) {
+				console.log(`Module: ${description.name} | Missing Gateway Intent ${requiredIntent[i]}`)
 			}
 		}
+	}
 
-	}
-	else {
-		// V12
-		init(client, options)
-	}
+
 
 	function init(client, options) {
 		if (debug) console.log(`Module: ${description.name} | init start`)
@@ -72,7 +70,9 @@ module.exports = async (client, options) => {
 	}
 
 	async function onReady() {
-		if (debug) console.log(`Module: ${description.name} | onReady start`, {"Ready": Ready})
+		if (debug) console.log(`Module: ${description.name} | onReady start`, {
+			"Ready": Ready
+		})
 		Ready = true;
 		console.log(`Module: ${description.name} | onReady`)
 		// Serverless Config
@@ -96,14 +96,17 @@ module.exports = async (client, options) => {
 				}
 			}
 		}
+		// Add a Cron job every minutes
+		let jobPlayingCheck = new cron.schedule('*/3 * * * * *', function () { // check 10 seeconds
+			if (debug) console.log(`Module: ${description.name} | jobPlayingCheck start`, {
+				"Ready": Ready
+			})
+			if (!Ready) return;
+			Check(client, options);
+		});
 	}
 
-	// Add a Cron job every minutes
-	let jobPlayingCheck = new cron.schedule('*/3 * * * * *', function () { // check 10 seeconds
-		if (debug) console.log(`Module: ${description.name} | jobPlayingCheck start`, {"Ready": Ready})
-		if (!Ready) return;
-		Check(client, options);
-	});
+
 
 	async function Check(bot, options) {
 		if (debug) console.log(`Module: ${description.name} | Check start`)
@@ -231,9 +234,9 @@ module.exports = async (client, options) => {
 
 
 	async function GamingLive(guild, options) {
-		if (debug) console.log(`Module: ${description.name} | GamingLive Start`)
+		if (debug) console.log(`Module: ${description.name} | GamingLive Start, version ${DiscordJSversion}`)
 		// Check if the bot can manage Roles for this guild
-		if ((DiscordJSversion === "12" && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === "13" && guild.me.permissions.has("MANAGE_ROLES"))) {
+		if (guild.me.permissions.has("MANAGE_ROLES")) {
 			if (debug) console.log(`Module: ${description.name} | GamingLive | VersionCheck and Role OK`)
 			// Loop trough presence to find streamers (type 1)
 			let presences = guild.presences;
@@ -271,7 +274,7 @@ module.exports = async (client, options) => {
 	async function GamingNotLive(guild, options) {
 		if (debug) console.log(`Module: ${description.name} | GamingNotLive Start`)
 		// Check if the bot can manage Roles for this guild
-		if ((DiscordJSversion === "12" && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === "13" && guild.me.permissions.has("MANAGE_ROLES"))) {
+		if (guild.me.permissions.has("MANAGE_ROLES")) {
 			// Loop trough presence to find streamers (type 1)
 			let gamingMembers = guild.roles.cache.find(val => val.name === options.live).members
 			let actionAlreadyTaken = false // This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated
