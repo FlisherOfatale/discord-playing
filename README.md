@@ -68,8 +68,8 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
-3.0.0 Added Initial supoport for DiscordJS V13.  This version is compatible to both V12 and V13
-2.4.4 Added 'casesensitive' and exactmatch 'options'  
+3.0.0 Added Initial supoport for DiscordJS V13.  
+2.4.4 Added 'casesensitive' and exactmatch 'options', last v12 compatible version
 2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version  
 2.2.5 Fixing a crash on line 70, thanks to Badbird-5907  
 2.2.3 Adding option to use custom status  
