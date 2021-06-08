@@ -1,7 +1,7 @@
 {
   "name": "discord-playing",
-  "version": "3.0.2",
-  "description": "Simple Discord.js v12 Module that assign temporary role to people currently playing specific games, usefull to highlight them in a separate group.",
+  "version": "3.0.5",
+  "description": "Simple Discord.js v13 Module that assign temporary role to people currently playing specific games, usefull to highlight them in a separate group.",
   "main": "discord-playing.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

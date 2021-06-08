@@ -9,13 +9,16 @@ Simply type the following command to install the module and it depedencies.
 ```
 npm i discord-playing
 ``` 
-##Discord.js v13 compatibility
-Require the following Intents to be requested: 'GUILD_PRESENCES', 'GUILDS', 'GUILD_MEMBERS'
+##Discord.js v13 compatibility  
+Require the following Intents to be requested: 'GUILD_PRESENCES', 'GUILDS', 'GUILD_MEMBERS'  
+If yu want to test while Discord.js v13 isn't released yet, you can use with `npm install discord-playing@discord.js-v13`  
+Once V13 is officially release, the default package install will install the V13  
 
-##Discord.js v12 compatibility
-Nothing special
 
-##Discord.js v11 compatibility
+##Discord.js v12 compatibility 
+Once Discord.js v13 is released, you'll need to use `npm install discord-playing@discord.js-v12`.
+
+##Discord.js v11 compatibility  
 You can install the last version working with Discord.js v11 by using `npm install discord-playing@discord.js-v11`.
 While this version should work, it's not maintainted anymore.
 
@@ -68,8 +71,8 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
-3.0.0 Added Initial supoport for DiscordJS V13.  
-2.4.4 Added 'casesensitive' and exactmatch 'options', last v12 compatible version
+3.0.4 Added Initial supoport for DiscordJS V13.  
+2.4.4 Added 'casesensitive' and exactmatch 'options', last v12 compatible version  
 2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version  
 2.2.5 Fixing a crash on line 70, thanks to Badbird-5907  
 2.2.3 Adding option to use custom status  
