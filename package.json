@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "discord.js": "^12.5.3",
+    "discord.js": "github:discordjs/discord.js",
     "node-cron": "^3.0.0"
   },
   "keywords": [

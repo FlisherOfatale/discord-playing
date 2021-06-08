@@ -27,11 +27,11 @@ module.exports = async (client, options) => {
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
 	const DiscordJSversion = require("discord.js").version.substring(0, 2)
-	const ValidDJSVersion = ['12', '13']
-	if (!ValidDJSVersion.includes(DiscordJSversion)) console.error("This version of discord-lobby only run on DiscordJS V12 and up, please run \"npm i discord-playing@discord.js-v11\" to install an older version")
-	if (!ValidDJSVersion.includes(DiscordJSversion)) return
+	console.log("version", client.version)
+	if (DiscordJSversion === '11') console.error("This version of discord-lobby only run on DiscordJS V13 and up, please run \"npm i discord-playing@discord.js-v11\" to install an older version")
+	if (DiscordJSversion === '12') console.error("This version of discord-lobby only run on DiscordJS V13 and up, please run \"npm i discord-playing@discord.js-v12\" to install an older version")
+	if (DiscordJSversion !== '13') return
 
-	if (DiscordJSversion === '13') {
 		// Check that required Gateway Intention
 		const {
 			Intents
@@ -52,10 +52,6 @@ module.exports = async (client, options) => {
 			}
 		}
 
-	}
-	else {
-		// V12
-		init(client, options)
 	}
 
 	function init(client, options) {
@@ -233,7 +229,7 @@ module.exports = async (client, options) => {
 	async function GamingLive(guild, options) {
 		if (debug) console.log(`Module: ${description.name} | GamingLive Start, version ${DiscordJSversion}`)
 		// Check if the bot can manage Roles for this guild
-		if ((DiscordJSversion === '12' && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === '13' && guild.me.permissions.has("MANAGE_ROLES"))) {
+		if ( guild.me.permissions.has("MANAGE_ROLES")) {
 			if (debug) console.log(`Module: ${description.name} | GamingLive | VersionCheck and Role OK`)
 			// Loop trough presence to find streamers (type 1)
 			let presences = guild.presences;
@@ -271,7 +267,7 @@ module.exports = async (client, options) => {
 	async function GamingNotLive(guild, options) {
 		if (debug) console.log(`Module: ${description.name} | GamingNotLive Start`)
 		// Check if the bot can manage Roles for this guild
-		if ((DiscordJSversion === "12" && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === "13" && guild.me.permissions.has("MANAGE_ROLES"))) {
+		if (guild.me.permissions.has("MANAGE_ROLES")) {
 			// Loop trough presence to find streamers (type 1)
 			let gamingMembers = guild.roles.cache.find(val => val.name === options.live).members
 			let actionAlreadyTaken = false // This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated
