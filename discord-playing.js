@@ -1,7 +1,7 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 2.4.4
+Version 3.0.0
 
 // Todo: 
 	Add randomness in the minutes for the cron task
@@ -9,40 +9,72 @@ Version 2.4.4
 	Add muti roles capability per server
 */
 
-module.exports = async (bot, options) => {
+module.exports = async (client, options) => {
 	const cron = require('node-cron');
 
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `2.4.4`
+		version: `3.0.0`
 	}
-
-	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
-	const DiscordJSversion = require("discord.js").version
-	if (DiscordJSversion.substring(0, 2) !== "12") console.error("This version of discord-lobby only run on DiscordJS V12 and up, please run \"npm i discord-playing@discord.js-v11\" to install an older version")
-	if (DiscordJSversion.substring(0, 2) !== "12") return
 
 	if (!options) {
 		options = {};
 	}
 
 	let Ready = false
+	const debug = true
 
-	// Add check on startup and intialize the Ready Value
-	if (options.AlreadyReady === true) {
-		onReady()
-		delete options.AlreadyReady
-	} else {
-		bot.on("ready", () => {
+	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
+	const DiscordJSversion = require("discord.js").version.substring(0, 2)
+	const ValidDJSVersion = ['12', '13']
+	if (!ValidDJSVersion.includes(DiscordJSversion)) console.error("This version of discord-lobby only run on DiscordJS V12 and up, please run \"npm i discord-playing@discord.js-v11\" to install an older version")
+	if (!ValidDJSVersion.includes(DiscordJSversion)) return
+
+	if (DiscordJSversion === '13') {
+		// Check that required Gateway Intention
+		const {
+			Intents
+		} = require('discord.js');
+		const liveIntent = new Intents(client.options.intents)
+		const requiredIntent = ['GUILD_PRESENCES', 'GUILDS', 'GUILD_MEMBERS']
+		const gotAllIntent = liveIntent.has(requiredIntent)
+
+		if (gotAllIntent) {
+			init(client, options)
+		} else {
+			console.log(`Module: ${description.name} | Version ${description.version} NOT initialized due to the following reasons ")`)
+			for (let i in requiredIntent) {
+				let checkedIntent = requiredIntent[i]
+				if (!liveIntent.has(requiredIntent[i])) {
+					console.log(`Module: ${description.name} | Missing Gateway Intent ${requiredIntent[i]}`)
+				}
+			}
+		}
+
+	}
+	else {
+		// V12
+		init(client, options)
+	}
+
+	function init(client, options) {
+		if (debug) console.log(`Module: ${description.name} | init start`)
+		// Add check on startup and intialize the Ready Value
+		if (options.AlreadyReady === true) {
 			onReady()
-		});
+			delete options.AlreadyReady
+		} else {
+			client.on("ready", () => {
+				onReady()
+			});
+		}
 	}
 
 	async function onReady() {
+		if (debug) console.log(`Module: ${description.name} | onReady start`, {"Ready": Ready})
 		Ready = true;
-		console.log(`Module: ${description.name} | Ready`)
-
+		console.log(`Module: ${description.name} | onReady`)
 		// Serverless Config
 		if (options && options.live) {
 			if (typeof options.casesensitive === 'undefined') options.casesensitive = true
@@ -68,24 +100,26 @@ module.exports = async (bot, options) => {
 
 	// Add a Cron job every minutes
 	let jobPlayingCheck = new cron.schedule('*/3 * * * * *', function () { // check 10 seeconds
+		if (debug) console.log(`Module: ${description.name} | jobPlayingCheck start`, {"Ready": Ready})
 		if (!Ready) return;
-		Check(bot, options);
+		Check(client, options);
 	});
 
 	async function Check(bot, options) {
+		if (debug) console.log(`Module: ${description.name} | Check start`)
 		if (!Ready) return;
 		Ready = false
 
 		if (options && options.live) {
 			// Single Server Config, will default to first guild found in the bot
-			let guild = bot.guilds.cache.first();
+			let guild = client.guilds.cache.first();
 			await GamingLive(guild, options)
 			await GamingNotLive(guild, options)
 		} else {
 			// Multi-Servers Config
 			for (let key in options) {
 				// check that guild is loaded			
-				let guild = bot.guilds.cache.get(key);
+				let guild = client.guilds.cache.get(key);
 				if (guild) {
 					await GamingLive(guild, options[key])
 					await GamingNotLive(guild, options[key])
@@ -99,28 +133,27 @@ module.exports = async (bot, options) => {
 
 
 	function isPlaying(activity, localoptions) {
+		if (debug) console.log(`Module: ${description.name} | isPlaying start`)
 		// TODO flip logic with loop if lax mode is enabled
 		// TODO add case scenario.
 		if (localoptions.exactmatch === true) {
 			if (localoptions.casesensitive === true) {
 				return localoptions.games.includes(activity.name) || localoptions.games.includes(activity.state)
-			}
-			else {
-				let match 
-				if ( typeof activity.name === "string" ) match = localoptions.games.includes(activity.name.toLowerCase())
-				if ( typeof activity.state === "string" ) match = ( localoptions.games.includes(activity.state.toLowerCase()) || match)
+			} else {
+				let match
+				if (typeof activity.name === "string") match = localoptions.games.includes(activity.name.toLowerCase())
+				if (typeof activity.state === "string") match = (localoptions.games.includes(activity.state.toLowerCase()) || match)
 				return match
 			}
-		}
-		else {
+		} else {
 			// loop for not exact match
 
 			// Turn haystack toLowerCase
-			if (! localoptions.casesensitive) {
+			if (!localoptions.casesensitive) {
 				if (typeof activity.name === "string") activity.name = activity.name.toLowerCase()
 				if (typeof activity.state === "string") activity.state = activity.state.toLowerCase()
 			}
-			
+
 			// Search needle in the haystack
 			for (let [key] in localoptions.games) {
 				/*
@@ -131,16 +164,19 @@ module.exports = async (bot, options) => {
 					"localoptions.games[key]" : localoptions.games[key],
 
 				})*/
-				if (typeof activity.name === "string") if (activity.name.includes(localoptions.games[key])) return true
-				if (typeof activity.state === "string") if (activity.state.includes(localoptions.games[key])) return true
+				if (typeof activity.name === "string")
+					if (activity.name.includes(localoptions.games[key])) return true
+				if (typeof activity.state === "string")
+					if (activity.state.includes(localoptions.games[key])) return true
 			}
-				
-			
+
+
 		}
 	}
 
 
 	function gotRequiredRole(member, requiredRole) {
+		if (debug) console.log(`Module: ${description.name} | gotRequiredRole Start`)
 		let returnValue = false
 		try {
 			if (typeof requiredRole !== "undefined" && member && member.roles && member.roles.cache) {
@@ -157,6 +193,7 @@ module.exports = async (bot, options) => {
 
 
 	async function addRole(member, role) {
+		if (debug) console.log(`Module: ${description.name} | addRole Start`)
 		let actionTaken = false
 		try {
 			if (!member.roles.cache.find(val => val.name === role || val.id === role)) {
@@ -175,6 +212,7 @@ module.exports = async (bot, options) => {
 
 
 	async function removeRole(member, role) {
+		if (debug) console.log(`Module: ${description.name} | removeRole Start`)
 		let actionTaken = false
 		try {
 			if (member.roles.cache.find(val => val.name === role || val.id === role)) {
@@ -193,12 +231,15 @@ module.exports = async (bot, options) => {
 
 
 	async function GamingLive(guild, options) {
+		if (debug) console.log(`Module: ${description.name} | GamingLive Start`)
 		// Check if the bot can manage Roles for this guild
-		if (guild.me.hasPermission("MANAGE_ROLES")) {
+		if ((DiscordJSversion === "12" && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === "13" && guild.me.permissions.has("MANAGE_ROLES"))) {
+			if (debug) console.log(`Module: ${description.name} | GamingLive | VersionCheck and Role OK`)
 			// Loop trough presence to find streamers (type 1)
 			let presences = guild.presences;
 			let actionAlreadyTaken = false
 			if (presences) {
+				if (debug) console.log(`Module: ${description.name} | GamingLive | Presence Loaded`)
 				// presences.cache.forEach(async function (element, key) {	
 				for (let [key, element] of presences.cache) {
 					if (!actionAlreadyTaken) { // This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated
@@ -228,8 +269,9 @@ module.exports = async (bot, options) => {
 	}
 
 	async function GamingNotLive(guild, options) {
+		if (debug) console.log(`Module: ${description.name} | GamingNotLive Start`)
 		// Check if the bot can manage Roles for this guild
-		if (guild.me.hasPermission("MANAGE_ROLES")) {
+		if ((DiscordJSversion === "12" && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === "13" && guild.me.permissions.has("MANAGE_ROLES"))) {
 			// Loop trough presence to find streamers (type 1)
 			let gamingMembers = guild.roles.cache.find(val => val.name === options.live).members
 			let actionAlreadyTaken = false // This check will skip the elements if an action was already taken, it's to prevent API spam when too many status need to be updated

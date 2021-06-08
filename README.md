@@ -9,6 +9,11 @@ Simply type the following command to install the module and it depedencies.
 ```
 npm i discord-playing
 ``` 
+##Discord.js v13 compatibility
+Require the following Intents to be requested: 'GUILD_PRESENCES', 'GUILDS', 'GUILD_MEMBERS'
+
+##Discord.js v12 compatibility
+Nothing special
 
 ##Discord.js v11 compatibility
 You can install the last version working with Discord.js v11 by using `npm install discord-playing@discord.js-v11`.
@@ -34,7 +39,7 @@ Playing(client, {
 
 ```js
 const Playing = require("discord-playing");
-Playing(bot, {
+Playing(client, {
 	"125048273865015211" : {
 		live :  "In-Game",
 		games : ["Star Citizen", "DCS World"],	// 1 or multiple games, format changed on v2.0.0
@@ -63,6 +68,7 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
+3.0.0 Added Initial supoport for DiscordJS V13.  This version is compatible to both V12 and V13
 2.4.4 Added 'casesensitive' and exactmatch 'options'  
 2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version  
 2.2.5 Fixing a crash on line 70, thanks to Badbird-5907  
