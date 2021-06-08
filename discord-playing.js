@@ -1,9 +1,8 @@
 /*
 Playing Highligh Module for DiscordJS
 Author: Flisher (andre@jmle.net)
-Version 3.0.5
 
-// Todo: 
+Todo: 
 	Add randomness in the minutes for the cron task
 	Add a limit of actions per minutes
 	Add muti roles capability per server
@@ -15,7 +14,7 @@ module.exports = async (client, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `3.0.5`
+		version: `3.0.7`
 	}
 
 	if (!options) {
@@ -23,13 +22,11 @@ module.exports = async (client, options) => {
 	}
 
 	let Ready = false
-	const debug = true
+	const debug = false
 
 	console.log(`Module: ${description.name} | Loaded - version ${description.version} from ("${description.filename}")`)
 	const DiscordJSversion = require("discord.js").version.substring(0, 2)
-	console.log({
-		"version": client.version
-	})
+
 	if (DiscordJSversion === '11') console.error("This version of discord-lobby only run on DiscordJS V13 and up, please run \"npm i discord-playing@discord.js-v11\" to install an older version")
 	if (DiscordJSversion === '12') console.error("This version of discord-lobby only run on DiscordJS V13 and up, please run \"npm i discord-playing@discord.js-v12\" to install an older version")
 	if (DiscordJSversion !== '13') return
