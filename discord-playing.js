@@ -15,7 +15,7 @@ module.exports = async (client, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `3.0.0`
+		version: `3.0.1`
 	}
 
 	if (!options) {
@@ -231,9 +231,9 @@ module.exports = async (client, options) => {
 
 
 	async function GamingLive(guild, options) {
-		if (debug) console.log(`Module: ${description.name} | GamingLive Start`)
+		if (debug) console.log(`Module: ${description.name} | GamingLive Start, version ${DiscordJSversion}`)
 		// Check if the bot can manage Roles for this guild
-		if ((DiscordJSversion === "12" && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === "13" && guild.me.permissions.has("MANAGE_ROLES"))) {
+		if ((DiscordJSversion === '12' && guild.me.hasPermission("MANAGE_ROLES")) || (DiscordJSversion === '13' && guild.me.permissions.has("MANAGE_ROLES"))) {
 			if (debug) console.log(`Module: ${description.name} | GamingLive | VersionCheck and Role OK`)
 			// Loop trough presence to find streamers (type 1)
 			let presences = guild.presences;
