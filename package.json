@@ -1,13 +1,13 @@
 {
   "name": "discord-playing",
-  "version": "3.0.7",
+  "version": "3.1.0",
   "description": "Simple Discord.js v13 Module that assign temporary role to people currently playing specific games, usefull to highlight them in a separate group.",
   "main": "discord-playing.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "^13.1.0",
     "node-cron": "^3.0.0"
   },
   "keywords": [

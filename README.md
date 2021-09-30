@@ -11,16 +11,13 @@ npm i discord-playing
 ``` 
 ##Discord.js v13 compatibility  
 Require the following Intents to be requested: 'GUILD_PRESENCES', 'GUILDS', 'GUILD_MEMBERS'  
-If yu want to test while Discord.js v13 isn't released yet, you can use with `npm install discord-playing@discord.js-v13`  
-Once V13 is officially release, the default package install will install the V13  
+If yu want to test while Discord.js v13 isn't released yet, you can use with `npm install discord-playing`  
 
+##Discord.js v11 and v12 compatibility 
+You can install DiscordJS v11 and v12 version using tag.  These aren't maintained anymore.
+V11: `npm install discord-playing@discord.js-v11`.
+V12: `npm install discord-playing@discord.js-v12`.
 
-##Discord.js v12 compatibility 
-Once Discord.js v13 is released, you'll need to use `npm install discord-playing@discord.js-v12`.
-
-##Discord.js v11 compatibility  
-You can install the last version working with Discord.js v11 by using `npm install discord-playing@discord.js-v11`.
-While this version should work, it's not maintainted anymore.
 
 ##Instructions
 Once you've done this, setting the module will be very easy.
@@ -71,6 +68,7 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
+3.1.0 Adjsted for DiscordJS V13 release
 3.0.7 Added Initial supoport for DiscordJS V13.  
 2.4.4 Added 'casesensitive' and exactmatch 'options', last v12 compatible version  
 2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version  
