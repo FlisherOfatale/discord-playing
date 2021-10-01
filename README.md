@@ -15,8 +15,8 @@ If yu want to test while Discord.js v13 isn't released yet, you can use with `np
 
 ##Discord.js v11 and v12 compatibility 
 You can install DiscordJS v11 and v12 version using tag.  These aren't maintained anymore.
-V11: `npm install discord-playing@discord.js-v11`.
-V12: `npm install discord-playing@discord.js-v12`.
+V11: `npm install discord-playing@discord.js-v11`  
+V12: `npm install discord-playing@discord.js-v12`  
 
 
 ##Instructions
@@ -68,8 +68,8 @@ Liens:  https://www.bucherons.ca et https://www.gardiensdulys.com
 You can reach me via my Discord Development Server at https://discord.gg/Tmtjkwz
 
 ###History:  
-3.1.0 Adjsted for DiscordJS V13 release
-3.0.7 Added Initial supoport for DiscordJS V13.  
+3.1.1 Adjsted for DiscordJS V13 release  
+3.0.7 Added Initial supoport for DiscordJS V13  
 2.4.4 Added 'casesensitive' and exactmatch 'options', last v12 compatible version  
 2.3.1 Fixed a possible error on line 100 when roles was not accessible, bumped depedencies version  
 2.2.5 Fixing a crash on line 70, thanks to Badbird-5907  

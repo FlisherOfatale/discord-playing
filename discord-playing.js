@@ -14,7 +14,7 @@ module.exports = async (client, options) => {
 	const description = {
 		name: `discord-playing`,
 		filename: `playing.js`,
-		version: `3.1.0`
+		version: `3.1.1`
 	}
 
 	if (!options) {
